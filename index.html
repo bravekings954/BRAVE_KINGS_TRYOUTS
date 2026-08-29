@@ -1,9 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>BRAVE༒KINGS | Guild Tryouts</title>
 
 <style>
@@ -172,7 +172,9 @@ label{
   font-weight:bold;
 }
 
-input,select,textarea{
+input,
+select,
+textarea{
   width:100%;
   padding:13px;
   border-radius:9px;
@@ -182,7 +184,9 @@ input,select,textarea{
   outline:none;
 }
 
-input:focus,select:focus,textarea:focus{
+input:focus,
+select:focus,
+textarea:focus{
   border-color:#ff6a00;
 }
 
@@ -243,6 +247,44 @@ small{
   display:none;
 }
 
+.tryout-table{
+  width:92%;
+  max-width:1050px;
+  margin:0 auto 70px;
+  padding:25px;
+  background:#111;
+  border:1px solid #292929;
+  border-radius:18px;
+  text-align:center;
+  overflow-x:auto;
+}
+
+.tryout-table h2{
+  color:#ff6a00;
+  margin-bottom:20px;
+}
+
+.tryout-table table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:650px;
+}
+
+.tryout-table th,
+.tryout-table td{
+  border:1px solid #333;
+  padding:13px;
+}
+
+.tryout-table th{
+  background:#1b1b1b;
+  color:#ff8a00;
+}
+
+.tryout-table td{
+  background:#101010;
+}
+
 footer{
   text-align:center;
   padding:30px 15px;
@@ -252,6 +294,7 @@ footer{
 }
 
 @media(max-width:700px){
+
   .cards,
   .form-grid{
     grid-template-columns:1fr;
@@ -268,41 +311,13 @@ footer{
   section{
     padding:50px 0;
   }
+
+  h1{
+    font-size:45px;
+  }
 }
 </style>
-<style>
-.tryout-table {
-  width: 100%;
-  max-width: 900px;
-  margin: 30px auto;
-  padding: 20px;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-.tryout-table h2 {
-  margin-bottom: 20px;
-}
-
-.tryout-table table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.tryout-table th,
-.tryout-table td {
-  border: 1px solid #555;
-  padding: 12px;
-}
-
-.tryout-table th {
-  font-weight: bold;
-}
-
-.tryout-table tr:hover {
-  opacity: 0.85;
-}
-</style></head>
+</head>
 
 <body>
 
@@ -386,32 +401,45 @@ footer{
 
         <div class="field">
           <label>In-Game Name</label>
-          <input type="text" id="name"
-                 placeholder="Your Free Fire name" required>
+          <input
+            type="text"
+            id="name"
+            placeholder="Your Free Fire name"
+            required>
         </div>
 
         <div class="field">
           <label>Free Fire UID</label>
-          <input type="text" id="uid"
-                 placeholder="Your UID" required>
+          <input
+            type="text"
+            id="uid"
+            placeholder="Your UID"
+            required>
         </div>
 
         <div class="field">
           <label>Game Level</label>
-          <input type="number" id="level"
-                 placeholder="Example: 65" required>
+          <input
+            type="number"
+            id="level"
+            placeholder="Example: 65"
+            required>
         </div>
 
         <div class="field">
           <label>Prime Level</label>
-          <input type="number" id="prime"
-                 placeholder="Example: 7">
+          <input
+            type="number"
+            id="prime"
+            placeholder="Example: 7">
         </div>
 
         <div class="field">
           <label>WhatsApp / Contact</label>
-          <input type="text" id="contact"
-                 placeholder="Your contact">
+          <input
+            type="text"
+            id="contact"
+            placeholder="Your contact">
         </div>
 
         <div class="field">
@@ -437,14 +465,18 @@ footer{
 
         <div class="field">
           <label>Current Rank</label>
-          <input type="text" id="rank"
-                 placeholder="Example: Heroic">
+          <input
+            type="text"
+            id="rank"
+            placeholder="Example: Heroic">
         </div>
 
         <div class="field">
           <label>Headshot %</label>
-          <input type="text" id="headshot"
-                 placeholder="Example: 25%">
+          <input
+            type="text"
+            id="headshot"
+            placeholder="Example: 25%">
         </div>
 
         <div class="field">
@@ -468,14 +500,19 @@ footer{
 
         <div class="field">
           <label>Previous Guild / Team</label>
-          <input type="text" id="previous"
-                 placeholder="Enter N/A if none">
+          <input
+            type="text"
+            id="previous"
+            placeholder="Enter N/A if none">
         </div>
 
         <div class="field full">
           <label>Profile Screenshot 📸</label>
-          <input type="file" id="screenshot"
-                 accept="image/png,image/jpeg,image/webp">
+          <input
+            type="file"
+            id="screenshot"
+            accept="image/png,image/jpeg,image/webp">
+
           <small>
             JPG, PNG or WEBP. Maximum 5MB.
           </small>
@@ -485,14 +522,18 @@ footer{
           <label>
             Why do you want to join BRAVE༒KINGS?
           </label>
-          <textarea id="reason"
-                    placeholder="Tell us why you want to join..."
-                    required></textarea>
+
+          <textarea
+            id="reason"
+            placeholder="Tell us why you want to join..."
+            required></textarea>
         </div>
 
       </div>
 
-      <button class="btn submit" type="submit">
+      <button
+        class="btn submit"
+        type="submit">
         ⚔ SUBMIT APPLICATION
       </button>
 
@@ -509,9 +550,14 @@ footer{
       Your application has been successfully submitted.
     </p>
 
-    <p>⚠️ Save your Application ID.</p>
+    <p>
+      ⚠️ Save your Application ID.
+    </p>
 
-    <div class="application-id" id="applicationId"></div>
+    <div
+      class="application-id"
+      id="applicationId">
+    </div>
 
     <br>
 
@@ -530,24 +576,65 @@ footer{
 </section>
 
 
+<div class="tryout-table">
+
+  <h2>⚔️ BRAVE༒KINGS TRYOUTS</h2>
+
+  <table>
+
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>UID</th>
+        <th>WhatsApp</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr>
+        <td>Player Name</td>
+        <td>123456789</td>
+        <td>Contact</td>
+        <td>Pending</td>
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>
+
+
 <section id="status">
 
   <div class="section-title">
     <h2>CHECK APPLICATION STATUS</h2>
-    <p>Enter the Application ID you received after submitting.</p>
+
+    <p>
+      Enter the Application ID you received
+      after submitting.
+    </p>
   </div>
 
   <div class="status-box">
 
-    <input type="text"
-           id="statusId"
-           placeholder="Example: BK-12345678">
+    <input
+      type="text"
+      id="statusId"
+      placeholder="Example: BK-12345678">
 
-    <button class="btn submit" onclick="checkStatus()">
+    <button
+      class="btn submit"
+      onclick="checkStatus()">
       🔎 CHECK STATUS
     </button>
 
-    <div class="status-result" id="statusResult"></div>
+    <div
+      class="status-result"
+      id="statusResult">
+    </div>
 
   </div>
 
@@ -563,49 +650,74 @@ footer{
 
 let savedApplicationId = "";
 
-document.getElementById("tryoutForm")
-.addEventListener("submit", function(e){
+document
+  .getElementById("tryoutForm")
+  .addEventListener("submit", function(e){
 
-  e.preventDefault();
+    e.preventDefault();
 
-  const file =
-    document.getElementById("screenshot").files[0];
+    const file =
+      document
+      .getElementById("screenshot")
+      .files[0];
 
-  if(file && file.size > 5 * 1024 * 1024){
-    alert("Your screenshot must be 5MB or smaller.");
-    return;
-  }
+    if(
+      file &&
+      file.size > 5 * 1024 * 1024
+    ){
 
-  savedApplicationId =
-    "BK-" +
-    Math.floor(10000000 + Math.random() * 90000000);
+      alert(
+        "Your screenshot must be 5MB or smaller."
+      );
 
-  document.getElementById("applicationId")
-    .textContent = savedApplicationId;
+      return;
+    }
 
-  document.getElementById("formBox")
-    .style.display = "none";
+    savedApplicationId =
+      "BK-" +
+      Math.floor(
+        10000000 +
+        Math.random() * 90000000
+      );
 
-  document.getElementById("success")
-    .style.display = "block";
+    document
+      .getElementById("applicationId")
+      .textContent =
+      savedApplicationId;
 
-  window.scrollTo({
-    top: document.getElementById("success")
-      .offsetTop - 30,
-    behavior:"smooth"
+    document
+      .getElementById("formBox")
+      .style.display = "none";
+
+    document
+      .getElementById("success")
+      .style.display = "block";
+
+    window.scrollTo({
+
+      top:
+        document
+        .getElementById("success")
+        .offsetTop - 30,
+
+      behavior:"smooth"
+
+    });
+
   });
-
-});
 
 
 function checkStatus(){
 
   const id =
-    document.getElementById("statusId")
-      .value.trim();
+    document
+    .getElementById("statusId")
+    .value
+    .trim();
 
   const result =
-    document.getElementById("statusResult");
+    document
+    .getElementById("statusResult");
 
   result.style.display = "block";
 
@@ -624,7 +736,9 @@ function checkStatus(){
       "Your BRAVE༒KINGS application is currently " +
       "being reviewed.";
 
-  }else{
+  }
+
+  else{
 
     result.innerHTML =
       "❌ Application ID not found on this device.";
@@ -633,29 +747,7 @@ function checkStatus(){
 
 }
 
-</script> <div class="tryout-table">
-  <h2>⚔️ BRAVE༒KINGS TRYOUTS</h2>
-
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>UID</th>
-        <th>WhatsApp</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr>
-        <td>Player Name</td>
-        <td>123456789</td>
-        <td>Contact</td>
-        <td>Pending</td>
-      </tr>
-    </tbody>
-  </table>
-</div>to be
+</script>
 
 </body>
 </html>
