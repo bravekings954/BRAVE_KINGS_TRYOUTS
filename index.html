@@ -6,6 +6,8 @@
 
 <title>BRAVE༒KINGS | Guild Tryouts</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{
   box-sizing:border-box;
@@ -205,6 +207,11 @@ small{
   font-size:16px;
 }
 
+.submit:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
 #success{
   display:none;
   text-align:center;
@@ -344,7 +351,6 @@ footer{
   </div>
 </header>
 
-
 <section>
 
   <div class="section-title">
@@ -385,7 +391,6 @@ footer{
 
 </section>
 
-
 <section id="apply">
 
   <div class="section-title">
@@ -401,44 +406,31 @@ footer{
 
         <div class="field">
           <label>In-Game Name</label>
-          <input
-            type="text"
-            id="name"
-            placeholder="Your Free Fire name"
-            required>
+          <input type="text" id="name"
+            placeholder="Your Free Fire name" required>
         </div>
 
         <div class="field">
           <label>Free Fire UID</label>
-          <input
-            type="text"
-            id="uid"
-            placeholder="Your UID"
-            required>
+          <input type="text" id="uid"
+            placeholder="Your UID" required>
         </div>
 
         <div class="field">
           <label>Game Level</label>
-          <input
-            type="number"
-            id="level"
-            placeholder="Example: 65"
-            required>
+          <input type="number" id="level"
+            placeholder="Example: 65" required>
         </div>
 
         <div class="field">
           <label>Prime Level</label>
-          <input
-            type="number"
-            id="prime"
+          <input type="number" id="prime"
             placeholder="Example: 7">
         </div>
 
         <div class="field">
           <label>WhatsApp / Contact</label>
-          <input
-            type="text"
-            id="contact"
+          <input type="text" id="contact"
             placeholder="Your contact">
         </div>
 
@@ -465,17 +457,13 @@ footer{
 
         <div class="field">
           <label>Current Rank</label>
-          <input
-            type="text"
-            id="rank"
+          <input type="text" id="rank"
             placeholder="Example: Heroic">
         </div>
 
         <div class="field">
           <label>Headshot %</label>
-          <input
-            type="text"
-            id="headshot"
+          <input type="text" id="headshot"
             placeholder="Example: 25%">
         </div>
 
@@ -500,17 +488,13 @@ footer{
 
         <div class="field">
           <label>Previous Guild / Team</label>
-          <input
-            type="text"
-            id="previous"
+          <input type="text" id="previous"
             placeholder="Enter N/A if none">
         </div>
 
         <div class="field full">
           <label>Profile Screenshot 📸</label>
-          <input
-            type="file"
-            id="screenshot"
+          <input type="file" id="screenshot"
             accept="image/png,image/jpeg,image/webp">
 
           <small>
@@ -523,8 +507,7 @@ footer{
             Why do you want to join BRAVE༒KINGS?
           </label>
 
-          <textarea
-            id="reason"
+          <textarea id="reason"
             placeholder="Tell us why you want to join..."
             required></textarea>
         </div>
@@ -533,6 +516,7 @@ footer{
 
       <button
         class="btn submit"
+        id="submitButton"
         type="submit">
         ⚔ SUBMIT APPLICATION
       </button>
@@ -540,7 +524,6 @@ footer{
     </form>
 
   </div>
-
 
   <div id="success">
 
@@ -554,10 +537,7 @@ footer{
       ⚠️ Save your Application ID.
     </p>
 
-    <div
-      class="application-id"
-      id="applicationId">
-    </div>
+    <div class="application-id" id="applicationId"></div>
 
     <br>
 
@@ -575,7 +555,6 @@ footer{
 
 </section>
 
-
 <div class="tryout-table">
 
   <h2>⚔️ BRAVE༒KINGS TRYOUTS</h2>
@@ -591,21 +570,15 @@ footer{
       </tr>
     </thead>
 
-    <tbody>
-
+    <tbody id="publicApplications">
       <tr>
-        <td>Player Name</td>
-        <td>123456789</td>
-        <td>Contact</td>
-        <td>Pending</td>
+        <td colspan="4">Loading...</td>
       </tr>
-
     </tbody>
 
   </table>
 
 </div>
-
 
 <section id="status">
 
@@ -627,6 +600,7 @@ footer{
 
     <button
       class="btn submit"
+      id="statusButton"
       onclick="checkStatus()">
       🔎 CHECK STATUS
     </button>
@@ -640,84 +614,310 @@ footer{
 
 </section>
 
-
 <footer>
   © 2026 BRAVE༒KINGS • Free Fire Guild
 </footer>
 
-
 <script>
 
-let savedApplicationId = "";
+/* =========================================
+   SUPABASE CONNECTION
+========================================= */
+
+const SUPABASE_URL =
+  "https://enhoicmhdhwksgwlveou.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_FhqemTWZw6K5w-vO6bze8g_-hm117f-";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+/* =========================================
+   CREATE APPLICATION ID
+========================================= */
+
+function generateApplicationId(){
+
+  return "BK-" +
+    Math.floor(
+      10000000 +
+      Math.random() * 90000000
+    );
+
+}
+
+
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+function escapeHtml(value){
+
+  return String(value || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================
+   SUBMIT APPLICATION
+========================================= */
 
 document
   .getElementById("tryoutForm")
-  .addEventListener("submit", function(e){
+  .addEventListener(
+    "submit",
+    async function(e){
 
-    e.preventDefault();
+      e.preventDefault();
 
-    const file =
-      document
-      .getElementById("screenshot")
-      .files[0];
+      const submitButton =
+        document.getElementById(
+          "submitButton"
+        );
 
-    if(
-      file &&
-      file.size > 5 * 1024 * 1024
-    ){
-
-      alert(
-        "Your screenshot must be 5MB or smaller."
-      );
-
-      return;
-    }
-
-    savedApplicationId =
-      "BK-" +
-      Math.floor(
-        10000000 +
-        Math.random() * 90000000
-      );
-
-    document
-      .getElementById("applicationId")
-      .textContent =
-      savedApplicationId;
-
-    document
-      .getElementById("formBox")
-      .style.display = "none";
-
-    document
-      .getElementById("success")
-      .style.display = "block";
-
-    window.scrollTo({
-
-      top:
+      const file =
         document
-        .getElementById("success")
-        .offsetTop - 30,
+          .getElementById("screenshot")
+          .files[0];
 
-      behavior:"smooth"
+      if(
+        file &&
+        file.size > 5 * 1024 * 1024
+      ){
 
-    });
+        alert(
+          "Your screenshot must be 5MB or smaller."
+        );
 
-  });
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent =
+        "SUBMITTING...";
+
+      try{
+
+        const applicationId =
+          generateApplicationId();
+
+        let screenshotUrl = null;
 
 
-function checkStatus(){
+        /* ================================
+           UPLOAD SCREENSHOT
+        ================================= */
+
+        if(file){
+
+          const extension =
+            file.name
+              .split(".")
+              .pop()
+              .toLowerCase();
+
+          const filePath =
+            applicationId +
+            "-" +
+            Date.now() +
+            "." +
+            extension;
+
+          const {
+            error:uploadError
+          } =
+          await supabaseClient
+            .storage
+            .from("tryout-screenshots")
+            .upload(
+              filePath,
+              file,
+              {
+                cacheControl:"3600",
+                upsert:false
+              }
+            );
+
+          if(uploadError){
+
+            throw new Error(
+              "Screenshot upload failed: " +
+              uploadError.message
+            );
+
+          }
+
+          screenshotUrl = filePath;
+
+        }
+
+
+        /* ================================
+           SAVE APPLICATION
+        ================================= */
+
+        const applicationData = {
+
+          application_id:
+            applicationId,
+
+          name:
+            document
+              .getElementById("name")
+              .value
+              .trim(),
+
+          uid:
+            document
+              .getElementById("uid")
+              .value
+              .trim(),
+
+          contact:
+            document
+              .getElementById("contact")
+              .value
+              .trim(),
+
+          gender:
+            document
+              .getElementById("gender")
+              .value,
+
+          role:
+            document
+              .getElementById("role")
+              .value,
+
+          rank:
+            document
+              .getElementById("rank")
+              .value
+              .trim(),
+
+          headshot:
+            document
+              .getElementById("headshot")
+              .value
+              .trim(),
+
+          reason:
+            document
+              .getElementById("reason")
+              .value
+              .trim(),
+
+          screenshot_url:
+            screenshotUrl,
+
+          status:
+            "Pending"
+
+        };
+
+
+        const {
+          error:insertError
+        } =
+        await supabaseClient
+          .from("applications")
+          .insert(applicationData);
+
+
+        if(insertError){
+
+          throw new Error(
+            "Application could not be saved: " +
+            insertError.message
+          );
+
+        }
+
+
+        /* ================================
+           SHOW SUCCESS
+        ================================= */
+
+        document
+          .getElementById("applicationId")
+          .textContent =
+          applicationId;
+
+        document
+          .getElementById("formBox")
+          .style.display =
+          "none";
+
+        document
+          .getElementById("success")
+          .style.display =
+          "block";
+
+        window.scrollTo({
+
+          top:
+            document
+              .getElementById("success")
+              .offsetTop - 30,
+
+          behavior:"smooth"
+
+        });
+
+        loadPublicApplications();
+
+      }
+
+      catch(error){
+
+        console.error(error);
+
+        alert(
+          "Could not submit application:\n\n" +
+          error.message
+        );
+
+        submitButton.disabled = false;
+
+        submitButton.textContent =
+          "⚔ SUBMIT APPLICATION";
+
+      }
+
+    }
+  );
+
+
+/* =========================================
+   CHECK APPLICATION STATUS
+========================================= */
+
+async function checkStatus(){
 
   const id =
     document
-    .getElementById("statusId")
-    .value
-    .trim();
+      .getElementById("statusId")
+      .value
+      .trim()
+      .toUpperCase();
 
   const result =
     document
-    .getElementById("statusResult");
+      .getElementById("statusResult");
+
+  const button =
+    document
+      .getElementById("statusButton");
 
   result.style.display = "block";
 
@@ -727,25 +927,187 @@ function checkStatus(){
       "⚠️ Please enter your Application ID.";
 
     return;
+
   }
 
-  if(id === savedApplicationId){
+  button.disabled = true;
+  button.textContent =
+    "CHECKING...";
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+    .from("applications")
+    .select(
+      "application_id,name,status"
+    )
+    .eq(
+      "application_id",
+      id
+    )
+    .maybeSingle();
+
+  button.disabled = false;
+  button.textContent =
+    "🔎 CHECK STATUS";
+
+  if(error){
+
+    console.error(error);
 
     result.innerHTML =
-      "<strong>⏳ UNDER REVIEW</strong><br><br>" +
-      "Your BRAVE༒KINGS application is currently " +
-      "being reviewed.";
+      "❌ Could not check status.<br><br>" +
+      escapeHtml(error.message);
+
+    return;
+
+  }
+
+  if(!data){
+
+    result.innerHTML =
+      "❌ Application ID not found.";
+
+    return;
+
+  }
+
+  const status =
+    data.status || "Pending";
+
+  let message = "";
+
+  if(
+    status.toLowerCase() ===
+    "approved"
+  ){
+
+    message =
+      "🎉 <strong>APPROVED</strong><br><br>" +
+      "Congratulations " +
+      escapeHtml(data.name) +
+      "! Your BRAVE༒KINGS application has been approved.";
+
+  }
+
+  else if(
+    status.toLowerCase() ===
+    "rejected"
+  ){
+
+    message =
+      "❌ <strong>REJECTED</strong><br><br>" +
+      "Your BRAVE༒KINGS application was not approved.";
 
   }
 
   else{
 
-    result.innerHTML =
-      "❌ Application ID not found on this device.";
+    message =
+      "⏳ <strong>UNDER REVIEW</strong><br><br>" +
+      "Your BRAVE༒KINGS application is currently being reviewed.";
 
   }
 
+  result.innerHTML = message;
+
 }
+
+
+/* =========================================
+   LOAD PUBLIC APPLICATIONS
+========================================= */
+
+async function loadPublicApplications(){
+
+  const table =
+    document
+      .getElementById(
+        "publicApplications"
+      );
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+    .from("applications")
+    .select(
+      "name,uid,contact,status"
+    )
+    .order(
+      "created_at",
+      {
+        ascending:false
+      }
+    )
+    .limit(20);
+
+  if(error){
+
+    console.error(error);
+
+    table.innerHTML =
+      "<tr><td colspan='4'>" +
+      "Unable to load applications." +
+      "</td></tr>";
+
+    return;
+
+  }
+
+  if(!data || !data.length){
+
+    table.innerHTML =
+      "<tr><td colspan='4'>" +
+      "No applications yet." +
+      "</td></tr>";
+
+    return;
+
+  }
+
+  table.innerHTML = "";
+
+  data.forEach(function(app){
+
+    const row =
+      document.createElement("tr");
+
+    row.innerHTML =
+
+      "<td>" +
+      escapeHtml(app.name) +
+      "</td>" +
+
+      "<td>" +
+      escapeHtml(app.uid) +
+      "</td>" +
+
+      "<td>" +
+      escapeHtml(app.contact) +
+      "</td>" +
+
+      "<td>" +
+      escapeHtml(
+        app.status || "Pending"
+      ) +
+      "</td>";
+
+    table.appendChild(row);
+
+  });
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+loadPublicApplications();
 
 </script>
 
